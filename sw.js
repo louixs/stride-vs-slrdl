@@ -1,7 +1,7 @@
 // Bump CACHE_VERSION whenever the file list changes. Page edits reach online users on their next visit anyway
 // (navigations are network-first); the bump just clears stale copies of the other files.
-const CACHE_VERSION = 'stride-rdl-v3';
-const PRECACHE = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
+const CACHE_VERSION = 'stride-rdl-v5';
+const PRECACHE = ['./', './index.html', './workouts.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -30,18 +30,27 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Pages: network first so edits show up on the next visit; fall back to the cached copy when offline.
+  // Pages: network first so edits show up on the next visit. Each page is cached under its own URL, and
+  // offline falls back to that cached copy, then to the index page.
   if (req.mode === 'navigate') {
+    const isIndex = /\/(index\.html)?$/.test(url.pathname);
     event.respondWith(
       fetch(req)
         .then((res) => {
           if (res && res.ok) {
             const copy = res.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put('./index.html', copy));
+            caches.open(CACHE_VERSION).then((cache) => {
+              cache.put(req, copy.clone());
+              if (isIndex) cache.put('./index.html', copy);
+            });
           }
           return res;
         })
-        .catch(() => caches.match('./index.html').then((c) => c || caches.match('./')))
+        .catch(() =>
+          caches.match(req, { ignoreSearch: true })
+            .then((c) => c || caches.match('./index.html'))
+            .then((c) => c || caches.match('./'))
+        )
     );
     return;
   }

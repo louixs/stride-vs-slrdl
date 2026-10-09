@@ -102,6 +102,8 @@ p{margin:0}
 .eyebrow{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 h1{white-space:nowrap;font-size:clamp(30px,9vw,68px);font-weight:700;text-transform:uppercase;letter-spacing:.015em}
 .lede{max-width:62ch;color:var(--fg-soft);font-size:16px}
+.navrow{display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.sib{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-block:14px 1px;margin-block:-14px -2px}
 
 /* stage */
 .stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
@@ -281,7 +283,7 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
 </head><body>
 <div class="wrap">
   <header class="top">
-    <div class="eyebrow">Running biomechanics / strength transfer</div>
+    <div class="eyebrow navrow"><span>Running biomechanics / strength transfer</span><a class="sib" href="workouts.html">Workout map →</a></div>
     <h1>Stride vs SL-RDL</h1>
     <p class="lede">Both movements are judged by one number: the angle between your thigh and pelvis. Scrub the stride and see where the SL-RDL can and cannot follow.</p>
   </header>
