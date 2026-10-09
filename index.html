@@ -55,6 +55,7 @@ img{max-width:100%}
   --mid-bg:#fbe6b0; --mid-fg:#6b4700;
   --no-bg:#dde3ea; --no-fg:#4b5868;
   --warn-bg:#fff1d6; --warn-line:#d9730d; --warn-fg:#5c3300;
+  --src-muscle:#2e7d4f; --src-pre:#7b4bd6; --src-reflex:#c42b6b; --spring-a:#0a7f95; --spring-b:#a8dbe5; --src-mom:#86672f;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
@@ -68,6 +69,7 @@ img{max-width:100%}
     --wedge:rgba(107,151,255,0.28); --wedge-ext:rgba(245,154,60,0.34); --ext:#f59a3c;
     --ok-bg:#12392a; --ok-fg:#7fe0ae; --mid-bg:#43330a; --mid-fg:#f3cd6e; --no-bg:#243040; --no-fg:#a8b6c8;
     --warn-bg:#3a2a10; --warn-line:#f59a3c; --warn-fg:#ffd9a1;
+    --src-muscle:#5fd08f; --src-pre:#b39bff; --src-reflex:#ff7da8; --spring-a:#3cc3dd; --spring-b:#1f6a7d; --src-mom:#d1b17a;
     color-scheme:dark;
   }
 }
@@ -81,6 +83,7 @@ img{max-width:100%}
   --wedge:rgba(107,151,255,0.28); --wedge-ext:rgba(245,154,60,0.34); --ext:#f59a3c;
   --ok-bg:#12392a; --ok-fg:#7fe0ae; --mid-bg:#43330a; --mid-fg:#f3cd6e; --no-bg:#243040; --no-fg:#a8b6c8;
   --warn-bg:#3a2a10; --warn-line:#f59a3c; --warn-fg:#ffd9a1;
+  --src-muscle:#5fd08f; --src-pre:#b39bff; --src-reflex:#ff7da8; --spring-a:#3cc3dd; --spring-b:#1f6a7d; --src-mom:#d1b17a;
   color-scheme:dark;
 }
 
@@ -157,6 +160,7 @@ h1{white-space:nowrap;font-size:clamp(30px,9vw,68px);font-weight:700;text-transf
 .svgtxt.small{font-weight:500;font-size:11px;fill:var(--fg-soft)}
 .svgtxt.tag{fill:var(--fg);font-size:12px}
 .halo{paint-order:stroke;stroke:var(--panel);stroke-width:3.5px;stroke-linejoin:round}
+.spring{stroke-width:1.8}
 
 /* caption / match slots (both panels reserve the same height so the figures line up) */
 .slot{display:grid;margin:8px 14px 0;padding:7px 10px;border-left:4px solid var(--line)}
@@ -226,6 +230,17 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
 .cdot2{fill:var(--panel);stroke:var(--slate);stroke-width:2}
 .cbandfill{stroke:none}
 
+/* force lanes */
+#lanesWrap{width:100%;min-width:0;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+#lanes{display:block;width:100%;height:auto}
+.lt{font:600 10.5px "IBM Plex Mono",monospace;fill:var(--fg)}
+.ln{font:400 10.5px "IBM Plex Mono",monospace;fill:var(--fg-soft)}
+.lb{font:600 9.5px "IBM Plex Mono",monospace}
+.lanenow{margin:8px 0 0;font-size:13.5px;min-height:4.6em}
+@media (min-width:700px){.lanenow{min-height:2.9em}}
+.lanecap{margin:6px 0 4px;font-size:12.5px;color:var(--fg-soft);max-width:80ch}
+.now .work+.work{margin-top:14px}
+
 /* now panel */
 .now{border:1px solid var(--line);border-top:3px solid var(--fg);background:var(--panel);border-radius:2px;padding:14px}
 .now>h2{font-size:22px;margin-bottom:10px}
@@ -279,7 +294,7 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
         <div class="big" id="runBig"><b id="runNum">30</b><span id="runWord">flexion</span><span id="runLeg">blue leg</span></div>
       </header>
       <div class="slot note"><span class="slottxt">Angle measured from the pelvis, which tips forward ~12° when running.</span><span class="sizer" aria-hidden="true">Same hip angle, wrong shape: your knee is deeply bent mid-swing, so the hamstring is slack.</span></div>
-      <div class="fig"><svg id="svgRun" viewBox="0 30 400 360" role="img" aria-label="Stick figure running to the right. The blue leg is the focus leg, the other leg is grey. A shaded wedge shows the hip angle, measured from the pelvis, of the leg the SL-RDL is following. That leg has a gold glow."></svg></div>
+      <div class="fig"><svg id="svgRun" viewBox="0 30 400 360" role="img" aria-label="Stick figure running to the right. The blue leg is the focus leg, the other leg is grey. A shaded wedge shows the hip angle, measured from the pelvis, of the leg the SL-RDL is following. That leg has a gold glow. A small teal spring on the leg that is on the ground shows the Achilles tendon stretching and springing back."></svg></div>
       <div class="meter">
         <div class="meter-head"><span><b>Hamstring stretch</b><span class="meter-val" id="mRunVal">0.0</span></span><span class="est">model estimate</span></div>
         <div class="track" id="mRunTrack" role="meter" aria-label="Hamstring stretch, running, model estimate" aria-valuemin="-1" aria-valuemax="6.5" aria-valuenow="0"><div class="fill" id="mRunFill"></div></div>
@@ -296,7 +311,7 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
         <svg id="svgRdl" viewBox="0 30 400 360" role="img" aria-label="Stick figure doing a single-leg Romanian deadlift. The standing leg is blue, the rear leg is grey and in line with the torso. A shaded wedge shows the hip angle of the standing leg."></svg>
         <div class="badge" id="badge" hidden><i aria-hidden="true">!</i><span id="badgeTxt">The SL-RDL standing leg can't go past straight. Toe-off extension (~10°) isn't trained here.</span></div>
       </div>
-      <p class="cap">In the RDL the working leg is always the one on the ground. Its hamstring and glute lengthen as you lower and shorten as you stand.</p>
+      <p class="cap">In the RDL the working leg is always the one on the ground. Its hamstring and glute lengthen as you lower and shorten as you stand. It is slow, so it trains the muscle itself and makes little use of the reflex or the tendon spring.</p>
       <div class="meter">
         <div class="meter-head"><span><b>Hamstring stretch</b><span class="meter-val" id="mRdlVal">0.0</span></span><span class="est">model estimate</span></div>
         <div class="track" id="mRdlTrack" role="meter" aria-label="Hamstring stretch, SL-RDL, model estimate" aria-valuemin="-1" aria-valuemax="6.5" aria-valuenow="0"><div class="fill" id="mRdlFill"></div></div>
@@ -357,6 +372,15 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
     <div id="chartWrap"><svg id="chart" role="img" aria-label="Chart of hip angle, measured from the pelvis, against the gait cycle. The running hip goes from 30 degrees flexion at contact to 10 degrees extension near toe-off and 58 degrees flexion in late swing. The SL-RDL standing leg covers 0 to 80 degrees. Click or drag to set the stride position."></svg></div>
   </section>
 
+  <section class="chartbox" style="margin-top:16px" aria-labelledby="laneTitle">
+    <div class="chead">
+      <h2 id="laneTitle">Where the force comes from</h2>
+    </div>
+    <div id="lanesWrap"><svg id="lanes" role="img" aria-label="Lane chart of where the force comes from across the stride, for the blue leg, on the same gait-cycle axis as the hip chart. Calf muscles work from just before contact to toe-off. Quads and glutes work from late swing into early stance. Hamstrings work from late swing into early stance. Hip flexors work in early swing. The brain switches the muscles on early in the last 12 percent before contact. A stretch reflex window follows contact, at about 4 to 10 percent. The Achilles tendon and foot arch stretch in the first half of stance and spring back in the second half. Momentum carries the leg through mid swing. Click or drag to set the stride position."></svg></div>
+    <p class="lanenow" id="laneNow" aria-live="off"></p>
+    <p class="lanecap">Bars show when each source is active for the blue leg. They overlap: muscles never switch off while a reflex or tendon does the work. In "Leg on the ground" mode a grey cursor marks the grey leg, which is 50% later. Timings are approximate lab averages, and how much force the reflex adds is still debated.</p>
+  </section>
+
   <section class="now" style="margin-top:16px" aria-labelledby="nowTitle">
     <h2 id="nowTitle">What's happening now</h2>
     <div class="segbar" id="segbar"></div>
@@ -370,6 +394,7 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
           <div><small>SL-RDL hip</small><b id="nRdl">0</b></div>
         </div>
         <div class="work"><h3>Who's doing the work</h3><p id="nowWork"></p></div>
+        <div class="work"><h3>Where the force comes from</h3><p id="nowForce"></p></div>
       </div>
       <div class="vlist" aria-label="SL-RDL verdicts for this phase">
         <div class="v"><span class="vk">Shape</span><span class="vb" id="vbShape"></span><p id="vtShape"></p></div>
@@ -386,12 +411,14 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
       <li>Landing position is set mostly by cadence. A 5 to 10% higher step rate cut hip flexion at contact from 26.7° to 23.6°.</li>
       <li>At marathon pace the calves do most of the propulsion and late-stance support, so train soleus and gastrocnemius directly.</li>
       <li>The rear leg in the RDL is a counterweight at about 0°. It does not practise toe-off.</li>
+      <li>Reflexes don't take over. Your brain switches the muscles on just before landing, a stretch reflex adds a quick boost, and the Achilles returns stored energy. The muscle still has to hold the tendon tight for the spring to work. How much force the reflex adds is still debated.</li>
     </ol>
   </section>
 
   <footer class="foot" style="margin-top:20px">
     <p>Angles are approximate lab means at 3.5 to 4.5 m/s (Fukuchi et al. 2017; Heiderscheit et al. 2011) and depend on the measurement model. Hip angles are measured from the pelvis, as in the lab data. The drawing tips the pelvis forward 12° so the thighs sit where they do in a real stride, and ignores pelvis rotation. The figure is schematic and is not your gait.</p>
     <p>The hamstring meter is a simplified model: stretch index = 5.0 x hip flexion minus 3.0 x knee flexion, in radians, shown relative only. Muscle roles: Hamner et al. 2010; Hamner and Delp 2013; Chumanov et al. 2011; Dorn et al. 2012.</p>
+    <p>Where the force comes from: muscles switch on before landing as a feedforward plan (Müller et al. 2015; Avela et al. 1996). The stretch reflex shows up in the calf about 35 to 45 ms after contact (Dietz et al. 1979), and its force contribution is debated (Komi 2000). The Achilles tendon and foot arch store energy in the first half of stance and return it in the second half (Ker et al. 1987; roughly 35 J and 17 J per step at 4.5 m/s). Calf fibres stay close to one length while the tendon does the stretching (Lai et al. 2014). Quads, calves and hip muscles by phase: Hamner et al. 2010; Dorn et al. 2012; Chumanov et al. 2011. Swing knee motion is shaped by both momentum and muscles (Piazza and Delp 1996, walking). A pause between lowering and lifting reduces the benefit of the stretch-shorten cycle (Wilson et al. 1991). Lane windows are rounded from these sources and the stride timing on this page, so treat them as approximate.</p>
   </footer>
   </main>
 </div>
@@ -533,6 +560,7 @@ function buildRun(){
   R.glowFar=el('polyline',{'class':'seg glow',fill:'none',visibility:'hidden'},s);
   R.legFar=el('polyline',{'class':'seg leg-o',fill:'none'},s);
   R.footFar=el('polyline',{'class':'seg foot-o',fill:'none'},s);
+  R.spFar=el('polyline',{'class':'seg spring',fill:'none'},s);
   R.trunk=el('line',{'class':'seg trunk',fill:'none'},s);
   R.neck=el('line',{'class':'seg neck',fill:'none'},s);
   R.head=el('circle',{'class':'head',r:HEADR,cx:0,cy:0},s);
@@ -541,6 +569,7 @@ function buildRun(){
   R.glowNear=el('polyline',{'class':'seg glow',fill:'none',visibility:'hidden'},s);
   R.legNear=el('polyline',{'class':'seg leg-f',fill:'none'},s);
   R.footNear=el('polyline',{'class':'seg foot-f',fill:'none'},s);
+  R.spNear=el('polyline',{'class':'seg spring',fill:'none'},s);
   R.ham=el('path',{'class':'ham',fill:'none',d:'M0 0'},s);
   R.hamA=el('circle',{'class':'hamdot',r:2.6,cx:0,cy:0},s);
   R.hamB=el('circle',{'class':'hamdot',r:2.6,cx:0,cy:0},s);
@@ -616,6 +645,7 @@ function drawRun(p,r){
   $('runLeg').textContent=r.subj==='grey'?'grey leg':'blue leg';
   $('runLeg').style.color=r.subj==='grey'?'var(--slate)':'var(--accent)';
   $('runBig').classList.toggle('ext',fh.ext);
+  springPath(R.spNear,L,p);springPath(R.spFar,Lo,(p+50)%100);
 }
 
 function buildRdl(){
@@ -829,6 +859,173 @@ function drawChartDyn(){
   CH.rdlTxt.setAttribute('y',f1(ty));CH.rdlHalo.setAttribute('y',f1(ty));
 }
 
+/* ---------- force sources: when each one is active for the blue leg (% of cycle from blue foot contact) ---------- */
+/* Windows are rounded from the sources in the footer and the stride timing on this page (1% is about 7 ms). A window with a>b wraps through 100/0. */
+var SRC={calves:[88,40],quads:[85,22],glutes:[85,16],flex:[38,65],ham:[75,15],pre:[88,100],reflex:[4,10],load:[0,19],recoil:[19,38],mom:[54,78]};
+var MUS=[['calves','Calves'],['quads','Quads'],['glutes','Glutes'],['flex','Hip flexors'],['ham','Hamstrings']];
+function inWin(ph,w){return w[0]<=w[1]?(ph>=w[0]&&ph<w[1]):(ph>=w[0]||ph<w[1]);}
+function winPieces(w){return w[0]<=w[1]?[[w[0],w[1]]]:[[w[0],100],[0,w[1]]];}
+/* model tendon stretch, 0 to 1: builds over the first half of stance, peaks at mid-stance, recoils over the second half, zero in swing */
+function tendonStretch(ph){return ph<STANCE_END?sin(Math.PI*ph/STANCE_END):0;}
+/* Achilles spring: drawn on top of the existing leg, from the back of the shank to the heel. Reads the computed joint positions only. */
+function springPath(e,P,ph){
+  var s=tendonStretch(ph), bk=[-cos(P.sh),sin(P.sh)];
+  var U=[(P.a[0]+P.k[0])/2+5.5*bk[0],(P.a[1]+P.k[1])/2+5.5*bk[1]], H=P.heel;
+  var dx=H[0]-U[0], dy=H[1]-U[1], len=Math.sqrt(dx*dx+dy*dy)||1, nx=-dy/len, ny=dx/len;
+  var N=8, amp=3.6-1.9*s, pts=[U], i;
+  for(i=1;i<N;i++){pts.push([U[0]+dx*i/N+nx*amp*(i%2?1:-1),U[1]+dy*i/N+ny*amp*(i%2?1:-1)]);}
+  pts.push(H);
+  poly(e,pts);
+  e.style.stroke='color-mix(in srgb, var(--spring-a) '+Math.round(30+70*s)+'%, var(--spring-b))';
+  e.style.opacity=(ph<STANCE_END?0.55+0.45*s:0.28).toFixed(2);
+}
+
+/* ---------- force lanes chart (same x-axis and cursor as the hip chart) ---------- */
+var LN={};
+var LANES=[
+ {id:'mus',title:'Muscles working (active)',note:'one bar per muscle group',sw:'--src-muscle'},
+ {id:'pre',title:'Switched on early (pre-activation)',note:'planned by the brain, not a reflex',sw:'--src-pre'},
+ {id:'ref',title:'Stretch reflex',note:'quick automatic boost, size debated',sw:'--src-reflex'},
+ {id:'ten',title:'Tendon spring (Achilles + arch)',note:'the muscle holds it tight while it stretches',sw:'--spring-a'},
+ {id:'mom',title:'Momentum (leg swings on)',note:"the leg's own momentum, muscles steer",sw:'--src-mom'}
+];
+function buildLanes(){
+  var wrap=$('lanesWrap'), svg=$('lanes');
+  if(!wrap||!svg){return;}
+  var W=Math.max(300,Math.round(wrap.clientWidth||800)), narrow=W<560;
+  var m={l:narrow?44:52,r:narrow?10:16}, pw=W-m.l-m.r;
+  var xs=function(p){return m.l+p/100*pw;};
+  var cwT=(narrow?9.5:10.5)*0.6, cwB=(narrow?9:9.5)*0.6;
+  var rowH=10, rowGap=3, barH=12, i, t;
+  /* layout pass */
+  var stripY=4, y=stripY+20, rows=[];
+  LANES.forEach(function(ln){
+    var inline=(ln.title.length+2+ln.note.length)*cwT+13<=pw;
+    var o={ln:ln,y:y,inline:inline};
+    o.barY=y+(inline?18:30);
+    o.h=ln.id==='mus'?(MUS.length*rowH+(MUS.length-1)*rowGap):barH;
+    y=o.barY+o.h+11;
+    rows.push(o);
+  });
+  var plotBottom=y, H=plotBottom+42;
+  LN={W:W,H:H,m:m,pw:pw,xs:xs,bars:[]};
+  while(svg.firstChild){svg.removeChild(svg.firstChild);}
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  var txt=function(str,x,yy,cls,anchor,fill,size){
+    var e=el('text',{x:f1(x),y:f1(yy),'class':cls},svg);
+    if(anchor){e.setAttribute('text-anchor',anchor);}
+    e.setAttribute('fill',fill);
+    e.setAttribute('style','paint-order:stroke;stroke:var(--panel);stroke-width:3px;stroke-linejoin:round'+(size?';font-size:'+size+'px':''));
+    e.textContent=str;
+    return e;
+  };
+  /* background, grid, ticks */
+  el('rect',{x:xs(0),y:stripY,width:xs(38)-xs(0),height:plotBottom-stripY,fill:'var(--stance)'},svg);
+  for(i=0;i<=100;i+=25){
+    el('line',{x1:xs(i),x2:xs(i),y1:stripY,y2:plotBottom,'class':'cgrid',fill:'none'},svg);
+    t=el('text',{x:xs(i),y:plotBottom+16,'text-anchor':(i===100&&narrow)?'end':'middle','class':'ctick'},svg);
+    t.setAttribute('fill','var(--fg-soft)');t.textContent=i+'%';
+  }
+  el('line',{x1:xs(38),x2:xs(38),y1:stripY,y2:plotBottom,'class':'cgrid',fill:'none',style:'stroke:var(--fg-soft);stroke-dasharray:2 3'},svg);
+  t=el('text',{x:xs(50),y:H-6,'text-anchor':'middle','class':'clab'},svg);t.setAttribute('fill','var(--fg-soft)');
+  t.textContent='Gait cycle (% from blue-leg foot contact)';
+  /* stance / swing strip */
+  txt(narrow?'Blue on ground':'Blue foot on ground',(xs(0)+xs(38))/2,stripY+12,'clab strong','middle','var(--fg)',narrow?9.5:null);
+  txt(narrow?'Blue swing':'Blue leg swinging',(xs(38)+xs(100))/2,stripY+12,'clab strong','middle','var(--fg)',narrow?9.5:null);
+  /* lanes */
+  var addBar=function(w,by,bh,fill,stroke,labels,labelFill,parent){
+    var g=el('g',{},svg), pcs=winPieces(w), best=null, lab=null, rects=[];
+    pcs.forEach(function(pc){
+      var x0=xs(pc[0]), x1=xs(pc[1]), wd=Math.max(1.5,x1-x0);
+      var r=el('rect',{x:f1(x0),y:f1(by),width:f1(wd),height:bh,rx:2,fill:fill},g);
+      if(stroke){r.setAttribute('stroke',stroke);r.setAttribute('stroke-width',1.2);}
+      rects.push(r);
+      if(!best||wd>best.wd){best={x:x0,wd:wd};}
+    });
+    if(labels){
+      for(var k=0;k<labels.length;k++){
+        if(labels[k].length*cwB+8<=best.wd){
+          var lt=el('text',{x:f1(best.x+best.wd/2),y:f1(by+bh/2+3.3),'text-anchor':'middle','class':'lb',fill:labelFill},g);
+          if(narrow){lt.style.fontSize='9px';}
+          lt.textContent=labels[k];
+          lab=lt;
+          break;
+        }
+      }
+    }
+    LN.bars.push({rects:rects,lab:lab,on:labelFill,w:w});
+    return g;
+  };
+  rows.forEach(function(o,idx){
+    var ln=o.ln;
+    if(idx>0){el('line',{x1:xs(0),x2:xs(100),y1:o.y-5,y2:o.y-5,'class':'cgrid',fill:'none'},svg);}
+    el('rect',{x:f1(xs(0)),y:f1(o.y+2),width:8,height:8,rx:1.5,fill:'var('+ln.sw+')'},svg);
+    txt(ln.title,xs(0)+13,o.y+10,'lt','start','var(--fg)',narrow?9.5:null);
+    if(o.inline){txt(ln.note,xs(0)+13+(ln.title.length+2)*cwT,o.y+10,'ln','start','var(--fg-soft)',narrow?9.5:null);}
+    else{txt(ln.note,xs(0)+13,o.y+22,'ln','start','var(--fg-soft)',narrow?9.5:null);}
+    var by=o.barY, bh=o.h;
+    if(ln.id==='mus'){
+      MUS.forEach(function(mu,j){addBar(SRC[mu[0]],by+j*(rowH+rowGap),rowH,'var(--src-muscle)',null,[mu[1]],'var(--on-accent)');});
+    }else if(ln.id==='pre'){
+      addBar(SRC.pre,by,bh,'var(--src-pre)',null,null,null);
+      txt('just before contact',xs(SRC.pre[0])-6,by+bh/2+3.5,'ln','end','var(--fg-soft)',narrow?9.5:null);
+    }else if(ln.id==='ref'){
+      addBar(SRC.reflex,by,bh,'var(--src-reflex)',null,null,null);
+      txt(narrow?'about 30 to 70 ms after':'about 30 to 70 ms after contact',xs(SRC.reflex[1])+6,by+bh/2+3.5,'ln','start','var(--fg-soft)',narrow?9.5:null);
+    }else if(ln.id==='ten'){
+      addBar(SRC.load,by,bh,'var(--spring-a)',null,['stretching','stretch'],'var(--on-accent)');
+      addBar(SRC.recoil,by,bh,'var(--spring-b)','var(--spring-a)',['springing back','recoil'],'var(--fg)');
+    }else{
+      addBar(SRC.mom,by,bh,'var(--src-mom)',null,['leg swings on','momentum','swing'],'var(--on-accent)');
+    }
+  });
+  /* cursors: blue leg always; grey leg (50% later) only in "Leg on the ground" mode */
+  LN.cur2=el('line',{x1:0,x2:0,y1:stripY,y2:plotBottom,'class':'ccursor',fill:'none',style:'stroke:var(--slate);stroke-dasharray:4 3;stroke-width:1.8'},svg);
+  LN.cur=el('line',{x1:0,x2:0,y1:stripY,y2:plotBottom,'class':'ccursor',fill:'none'},svg);
+  LN.lab2=txt('grey',0,plotBottom-2,'clab','middle','var(--slate)',9);
+  LN.lab=txt('blue',0,plotBottom-2,'clab','middle','var(--accent)',9);
+  var ov=el('rect',{x:m.l,y:stripY,width:pw,height:plotBottom-stripY,fill:'transparent',style:'cursor:ew-resize'},svg);
+  var drag=false;
+  var setFrom=function(e){
+    var r=svg.getBoundingClientRect();
+    setPhase(clamp(((e.clientX-r.left)*(W/r.width)-m.l)/pw*100,0,100),true);
+  };
+  ov.addEventListener('pointerdown',function(e){drag=true;try{ov.setPointerCapture(e.pointerId);}catch(_){}setFrom(e);});
+  ov.addEventListener('pointermove',function(e){if(drag){setFrom(e);}});
+  ov.addEventListener('pointerup',function(){drag=false;});
+  ov.addEventListener('pointercancel',function(){drag=false;});
+  drawLanesDyn();
+}
+function drawLanesDyn(){
+  var r=cur.r;
+  if(!LN.cur||!r){return;}
+  var ground=r.mode==='ground', grey=r.subj==='grey', sph=r.sph, p=cur.p;
+  var xb=LN.xs(p), xg=LN.xs((p+50)%100), lo=LN.m.l+16, hi=LN.W-LN.m.r-16, a=[];
+  LN.cur.setAttribute('x1',f1(xb));LN.cur.setAttribute('x2',f1(xb));
+  LN.cur2.setAttribute('x1',f1(xg));LN.cur2.setAttribute('x2',f1(xg));
+  LN.cur.style.opacity=(ground&&grey)?'0.3':'1';
+  LN.cur2.style.opacity=grey?'1':'0.35';
+  LN.cur2.setAttribute('visibility',ground?'visible':'hidden');
+  [[LN.lab,xb,ground],[LN.lab2,xg,ground]].forEach(function(o){
+    o[0].setAttribute('x',f1(clamp(o[1],lo,hi)));o[0].setAttribute('visibility',o[2]?'visible':'hidden');
+  });
+  LN.bars.forEach(function(b){
+    var on=inWin(sph,b.w);
+    b.rects.forEach(function(r){r.style.opacity=on?'1':'0.4';});
+    if(b.lab){b.lab.setAttribute('fill',on?b.on:'var(--fg)');}
+  });
+  /* readout for the leg the page is talking about */
+  MUS.forEach(function(mu){if(inWin(sph,SRC[mu[0]])){a.push(mu[1].toLowerCase());}});
+  var parts=[];
+  if(a.length){parts.push('Muscles working: '+a.join(', '));}
+  if(inWin(sph,SRC.pre)){parts.push('Switched on early (planned)');}
+  if(inWin(sph,SRC.reflex)){parts.push('Stretch reflex');}
+  if(inWin(sph,SRC.load)){parts.push('Tendon stretching');}
+  else if(inWin(sph,SRC.recoil)){parts.push('Tendon springing back');}
+  if(inWin(sph,SRC.mom)){parts.push('Momentum carrying the leg');}
+  $('laneNow').innerHTML='<b>'+(grey?'Grey leg':'Blue leg')+' at '+Math.round(sph)+'%'+(grey?' of its own cycle':'')+'.</b> '+parts.join('. ')+'.';
+}
+
 /* ---------- Free mode: where in the stride does the blue leg have this hip angle? ---------- */
 function roots(h){
   var out=[], prev=ev(HIP,0)-h, pp=0, i, g, p, q;
@@ -863,27 +1060,32 @@ var SEGS=[
   work:'Quads do most of the braking as the knee bends under load. Glute max adds to support just after contact.',
   shape:['partial','Hip near 30° matches the top third of the RDL, but the knee is more bent and the load comes from below.'],
   job:['partial','Hip extensors and glute max resist hip flexion, but the quads are the main brakes.'],
-  time:['no','Ground contact lasts about 0.2 s. A rep takes 2 to 3 s.']},
+  time:['no','Ground contact lasts about 0.2 s. A rep takes 2 to 3 s.'],
+  force:'The muscles were switched on before landing. The stretch reflex adds a quick boost 30 to 70 ms after contact, while the Achilles and arch start to stretch.'},
  {a:8,b:30,name:'Midstance',nm:'Midstance',
   work:'The calves (soleus and gastrocnemius) and quads carry most of the body support. The glutes share it.',
   shape:['partial','The hip passes from about 30° to near straight, which the RDL covers, but with a bent knee and a load from below.'],
   job:['partial','Calves and quads carry most of the support. Hip extensors help.'],
-  time:['no','Stance is about 0.2 s in total. The RDL lowers over 2 to 3 s.']},
+  time:['no','Stance is about 0.2 s in total. The RDL lowers over 2 to 3 s.'],
+  force:'The calves hold close to one length while the Achilles and arch stretch, then spring back. The reflex has faded, so this is muscle work plus tendon spring.'},
  {a:30,b:42,name:'Push-off and toe-off',nm:'Push-off',
   work:'The calves, mainly soleus, deliver most of the propulsion at this speed. The hip is already extended.',
   shape:['no','The hip is in extension, about 10° past straight. The RDL stops at 0°.'],
   job:['no','Calf and soleus are the main propulsion at this speed, and the RDL does not load them.'],
-  time:['no','Push-off is a fraction of a second. The RDL is a slow lift.']},
+  time:['no','Push-off is a fraction of a second. The RDL is a slow lift.'],
+  force:'The tendon gives back its stored energy while the calves keep working on top of it. The early reflex is long over.'},
  {a:42,b:80,name:'Early and mid swing',nm:'Early/mid swing',
   work:'The hip flexors swing the leg forward while the knee folds. The hamstrings are slack.',
   shape:['no','The knee is deeply bent and the hamstring is slack. The RDL keeps the knee nearly straight.'],
   job:['no','Hip flexors swing the leg. The RDL does not train that.'],
-  time:['no','The swing takes about 0.4 s. The RDL takes 2 to 3 s per rep.']},
+  time:['no','The swing takes about 0.4 s. The RDL takes 2 to 3 s per rep.'],
+  force:'The hip flexors start the swing, then the leg\'s own momentum does most of the work and the muscles steer. The Achilles spring is at rest and no stance reflex is firing.'},
  {a:80,b:100.01,name:'Late swing',nm:'Late swing',
   work:'The hamstrings lengthen under load to brake the shank, and the hip-extension moment peaks here. Much of the stretch is taken by the tendon.',
   shape:['match','Hip about 50 to 58° with a nearly straight knee and the hamstring near its longest, like the lower half of the RDL.'],
   job:['partial','Hamstrings brake the shank and hip extensors peak here, but the muscle-tendon unit, especially the tendon, takes much of the stretch.'],
-  time:['no','About 0.1 s here against 2 to 3 s of lowering.']}
+  time:['no','About 0.1 s here against 2 to 3 s of lowering.'],
+  force:'The hamstrings brake the leg while the glutes and quads work. Just before landing your brain also switches the calves and quads on early, as a plan and not a reflex.'}
 ];
 var VL={match:'Match',partial:'Partial',no:'No'};
 var CHIPS=[['Touchdown',0],['Midstance',18],['Toe-off',38],['Peak swing',85],['Late swing',93]];
@@ -930,6 +1132,7 @@ function render(){
   $('matchBox').className='slot match '+ml[0];
   cur.p=p;cur.r=r;
   drawChartDyn();
+  drawLanesDyn();
   $('phase').value=p;
   $('phaseOut').textContent=Math.round(p)+'%';
   var si=segIndex(r.sph), S=SEGS[si];
@@ -939,6 +1142,7 @@ function render(){
     $('nowName').textContent=S.name;
     $('nowRange').textContent=S.a+' to '+Math.min(100,Math.round(S.b))+'% of the cycle'+(r.subj==='grey'?' (grey leg, stride position + 50%)':'')+(r.mode==='ground'&&r.flight?'. Both feet in the air.':'');
     $('nowWork').textContent=S.work;
+    $('nowForce').textContent=S.force;
     setVerdict('Shape',S.shape);setVerdict('Job',S.job);setVerdict('Time',S.time);
     var bs=$('segbar').children;
     for(var i=0;i<bs.length;i++){if(i===si){bs[i].setAttribute('aria-current','true');}else{bs[i].removeAttribute('aria-current');}}
@@ -1024,7 +1228,14 @@ if(window.ResizeObserver){
   new ResizeObserver(function(){var w=$('chartWrap').clientWidth;if(w!==lastW){lastW=w;onResize();}}).observe($('chartWrap'));
 }else{window.addEventListener('resize',onResize);}
 buildChart();
+buildLanes();
 render();
+(function(){
+  var lz=null, lastLW=0;
+  var again=function(){clearTimeout(lz);lz=setTimeout(function(){buildLanes();drawLanesDyn();},60);};
+  if(window.ResizeObserver){new ResizeObserver(function(){var w=$('lanesWrap').clientWidth;if(w!==lastLW){lastLW=w;again();}}).observe($('lanesWrap'));}
+  else{window.addEventListener('resize',again);}
+})();
 window.__stride={setPhase:function(p){setPhase(p,true);},setMode:setMode,state:st,pelvisY:pelvisY,legPose:legPose,kin:kin,lowAt:lowAt,GF:GF,PT:PT,follow:follow,matchLine:matchLine,reduce:reduce};
 })();
 </script>
