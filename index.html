@@ -42,6 +42,7 @@ img{max-width:100%}
   --grid:#d6dee9;
   --track:#d3dbe7;
   --fig:#38465b;
+  --arm-n:#5b7391; --arm-f:#a6b3c6; --follow:#e3a008;
   --ground:#5b6b80;
   --on-accent:#ffffff;
   --stance:rgba(28,79,214,0.07);
@@ -61,6 +62,7 @@ img{max-width:100%}
     --bg:#0d131c; --fg:#e4ebf5; --accent:#6b97ff; --slate:#71829a;
     --ham-lo:#f0b429; --ham-hi:#ff5a4a; --panel:#131b27; --fg-soft:#9aabc0;
     --line:#2a3647; --grid:#1f2937; --track:#263243; --fig:#c2cedc; --ground:#7f90a6;
+    --arm-n:#8da2bd; --arm-f:#566a84; --follow:#f0b429;
     --on-accent:#0b1220;
     --stance:rgba(107,151,255,0.08); --band:rgba(107,151,255,0.12); --band2:rgba(107,151,255,0.26);
     --wedge:rgba(107,151,255,0.28); --wedge-ext:rgba(245,154,60,0.34); --ext:#f59a3c;
@@ -73,6 +75,7 @@ img{max-width:100%}
   --bg:#0d131c; --fg:#e4ebf5; --accent:#6b97ff; --slate:#71829a;
   --ham-lo:#f0b429; --ham-hi:#ff5a4a; --panel:#131b27; --fg-soft:#9aabc0;
   --line:#2a3647; --grid:#1f2937; --track:#263243; --fig:#c2cedc; --ground:#7f90a6;
+  --arm-n:#8da2bd; --arm-f:#566a84; --follow:#f0b429;
   --on-accent:#0b1220;
   --stance:rgba(107,151,255,0.08); --band:rgba(107,151,255,0.12); --band2:rgba(107,151,255,0.26);
   --wedge:rgba(107,151,255,0.28); --wedge-ext:rgba(245,154,60,0.34); --ext:#f59a3c;
@@ -108,7 +111,7 @@ h1{white-space:nowrap;font-size:clamp(30px,9vw,68px);font-weight:700;text-transf
 .cap{padding:4px 14px 0;font-size:12.5px;color:var(--fg-soft)}
 .big{text-align:right;flex:none;line-height:1}
 .big b{display:block;font:700 44px/1 "Saira Condensed","Arial Narrow",sans-serif;color:var(--accent);font-variant-numeric:tabular-nums;min-width:2.3ch}
-.big span{font:500 11px/1.2 "IBM Plex Mono",monospace;color:var(--fg-soft);text-transform:uppercase;letter-spacing:.08em}
+.big span{display:block;font:500 11px/1.2 "IBM Plex Mono",monospace;color:var(--fg-soft);text-transform:uppercase;letter-spacing:.08em}
 .big.ext b{color:var(--ext)}
 .fig{position:relative;min-width:0}
 .fig svg{display:block;width:100%;height:auto}
@@ -128,25 +131,45 @@ h1{white-space:nowrap;font-size:clamp(30px,9vw,68px);font-weight:700;text-transf
 .floor{fill:var(--track);stroke:none}
 .seg{fill:none;stroke-linecap:round;stroke-linejoin:round}
 .leg-f{stroke:var(--accent);stroke-width:6.5}
-.leg-o{stroke:var(--slate);stroke-width:5.5}
+.leg-o{stroke:var(--slate);stroke-width:5;opacity:.88}
+.glow{stroke:var(--follow);stroke-width:15;opacity:.42}
 .foot-f{stroke:var(--accent);stroke-width:5}
-.foot-o{stroke:var(--slate);stroke-width:4.5}
+.foot-o{stroke:var(--slate);stroke-width:4.2;opacity:.88}
 .trunk{stroke:var(--fig);stroke-width:8}
-.arm-n{stroke:var(--fig);stroke-width:4.5}
-.arm-f{stroke:var(--slate);stroke-width:4}
+.neck{stroke:var(--fig);stroke-width:5}
+.arm-n{stroke:var(--arm-n);stroke-width:4.6}
+.arm-halo{stroke:var(--panel);stroke-width:8.6}
+.arm-f{stroke:var(--arm-f);stroke-width:3.4}
+.hand-n{fill:var(--arm-n);stroke:var(--panel);stroke-width:1.5}
+.hand-f{fill:var(--arm-f);stroke:none}
 .head{fill:var(--panel);stroke:var(--fig);stroke-width:3.5}
 .joint{fill:var(--panel);stroke:var(--accent);stroke-width:2.5}
 .ham{fill:none;stroke-width:2.6;stroke-linecap:round}
 .hamdot{fill:var(--panel);stroke:var(--fg);stroke-width:1.2}
 .wedge{fill:var(--wedge);stroke:var(--accent);stroke-width:1.5}
 .wedge.ext{fill:var(--wedge-ext);stroke:var(--ext)}
+.wedge.grey{fill:rgba(135,150,171,0.32);stroke:var(--slate)}
 .ref{stroke:var(--fg-soft);stroke-width:1.2;stroke-dasharray:3 3;fill:none}
 .bell{fill:var(--fig);stroke:none}
 .bellbar{stroke:var(--fig);stroke-width:3;fill:none;stroke-linecap:round}
 .hand{fill:var(--fig);stroke:none}
 .svgtxt{font:600 13px "IBM Plex Mono",ui-monospace,monospace;fill:var(--fg)}
 .svgtxt.small{font-weight:500;font-size:11px;fill:var(--fg-soft)}
+.svgtxt.tag{fill:var(--fg);font-size:12px}
 .halo{paint-order:stroke;stroke:var(--panel);stroke-width:3.5px;stroke-linejoin:round}
+
+/* caption / match slots (both panels reserve the same height so the figures line up) */
+.slot{display:grid;margin:8px 14px 0;padding:7px 10px;border-left:4px solid var(--line)}
+.slot>*{grid-area:1/1;min-width:0}
+.slot .sizer{visibility:hidden;font:600 14px/1.35 "IBM Plex Sans",system-ui,sans-serif}
+.slot.note .slottxt{align-self:center;font-size:12.5px;line-height:1.35;color:var(--fg-soft)}
+.slot.match .slottxt{align-self:center;font:600 14px/1.35 "IBM Plex Sans",system-ui,sans-serif}
+.slot.match{background:var(--no-bg);color:var(--no-fg);border-left-color:var(--no-fg)}
+.slot.match.ok{background:var(--ok-bg);color:var(--ok-fg);border-left-color:var(--ok-fg)}
+.slot.match.mid{background:var(--mid-bg);color:var(--mid-fg);border-left-color:var(--mid-fg)}
+@media (max-width:699px){.slot.note .sizer{display:none}}
+.panel .meter{margin-top:auto}
+.sw.ring{border-top:0;height:10px;width:10px;border:3px solid var(--follow);border-radius:50%;box-sizing:border-box}
 
 /* controls */
 .controls{border:1px solid var(--line);background:var(--panel);border-radius:2px;padding:14px;display:grid;gap:14px 28px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
@@ -253,9 +276,10 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
     <article class="panel">
       <header class="ph">
         <div><h2>Running stride <span>(side view, treadmill frame). Blue is the focus (right) leg.</span></h2></div>
-        <div class="big" id="runBig"><b id="runNum">30</b><span id="runWord">flexion</span></div>
+        <div class="big" id="runBig"><b id="runNum">30</b><span id="runWord">flexion</span><span id="runLeg">blue leg</span></div>
       </header>
-      <div class="fig"><svg id="svgRun" viewBox="0 30 400 360" role="img" aria-label="Stick figure running to the right. The focus leg is blue, the other leg is grey. A shaded wedge shows the hip angle of the focus leg."></svg></div>
+      <div class="slot note"><span class="slottxt">Angle measured from the pelvis, which tips forward ~12° when running.</span><span class="sizer" aria-hidden="true">Same hip angle, wrong shape: your knee is deeply bent mid-swing, so the hamstring is slack.</span></div>
+      <div class="fig"><svg id="svgRun" viewBox="0 30 400 360" role="img" aria-label="Stick figure running to the right. The blue leg is the focus leg, the other leg is grey. A shaded wedge shows the hip angle, measured from the pelvis, of the leg the SL-RDL is following. That leg has a gold glow."></svg></div>
       <div class="meter">
         <div class="meter-head"><span><b>Hamstring stretch</b><span class="meter-val" id="mRunVal">0.0</span></span><span class="est">model estimate</span></div>
         <div class="track" id="mRunTrack" role="meter" aria-label="Hamstring stretch, running, model estimate" aria-valuemin="-1" aria-valuemax="6.5" aria-valuenow="0"><div class="fill" id="mRunFill"></div></div>
@@ -264,13 +288,15 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
 
     <article class="panel">
       <header class="ph">
-        <div><h2>Single-leg RDL <span>Blue leg stands, knee fixed at 15°. Torso and rear leg hinge as one line.</span></h2></div>
+        <div><h2>Single-leg RDL <span>Standing leg in blue, knee fixed at 15°. Torso and rear leg hinge as one line.</span></h2></div>
         <div class="big" id="rdlBig"><b id="rdlNum">0</b><span id="rdlWord">flexion</span></div>
       </header>
+      <div class="slot match no" id="matchBox"><span class="slottxt" id="matchTxt"></span><span class="sizer" aria-hidden="true">Same hip angle, wrong shape: your knee is deeply bent mid-swing, so the hamstring is slack.</span></div>
       <div class="fig">
         <svg id="svgRdl" viewBox="0 30 400 360" role="img" aria-label="Stick figure doing a single-leg Romanian deadlift. The standing leg is blue, the rear leg is grey and in line with the torso. A shaded wedge shows the hip angle of the standing leg."></svg>
-        <div class="badge" id="badge" hidden><i aria-hidden="true">!</i><span>The SL-RDL standing leg can't go past straight. Toe-off extension (~10°) isn't trained here.</span></div>
+        <div class="badge" id="badge" hidden><i aria-hidden="true">!</i><span id="badgeTxt">The SL-RDL standing leg can't go past straight. Toe-off extension (~10°) isn't trained here.</span></div>
       </div>
+      <p class="cap">In the RDL the working leg is always the one on the ground. Its hamstring and glute lengthen as you lower and shorten as you stand.</p>
       <div class="meter">
         <div class="meter-head"><span><b>Hamstring stretch</b><span class="meter-val" id="mRdlVal">0.0</span></span><span class="est">model estimate</span></div>
         <div class="track" id="mRdlTrack" role="meter" aria-label="Hamstring stretch, SL-RDL, model estimate" aria-valuemin="-1" aria-valuemax="6.5" aria-valuenow="0"><div class="fill" id="mRdlFill"></div></div>
@@ -292,20 +318,21 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
     </div>
     <div class="cgroup">
       <fieldset>
-        <legend>SL-RDL mode</legend>
+        <legend>RDL follows</legend>
         <div class="segopt">
-          <label for="modeFollow"><input type="radio" name="mode" id="modeFollow" value="follow" checked><span>Follow the stride</span></label>
+          <label for="modeBlue"><input type="radio" name="mode" id="modeBlue" value="blue" checked><span>Blue leg</span></label>
+          <label for="modeGround"><input type="radio" name="mode" id="modeGround" value="ground"><span>Leg on the ground</span></label>
           <label for="modeFree"><input type="radio" name="mode" id="modeFree" value="free"><span>Free</span></label>
         </div>
       </fieldset>
       <div class="scrub">
-        <label class="lab" for="depth"><span>Free depth</span><output id="depthOut" for="depth">60°</output></label>
+        <label class="lab" for="depth"><span>Free depth (Free only)</span><output id="depthOut" for="depth">60°</output></label>
         <input type="range" id="depth" min="0" max="85" step="1" value="60" disabled>
       </div>
     </div>
     <div class="cgroup wide">
       <div class="scrub" style="flex-basis:100%">
-        <label class="lab" for="phase"><span>Stride position (0% = focus foot contact)</span><output id="phaseOut" for="phase">90%</output></label>
+        <label class="lab" for="phase"><span>Stride position (0% = blue foot contact)</span><output id="phaseOut" for="phase">90%</output></label>
         <input type="range" id="phase" min="0" max="100" step="0.1" value="90">
       </div>
     </div>
@@ -321,12 +348,13 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
     <div class="chead">
       <h2 id="chartTitle">Hip angle across the stride</h2>
       <ul class="legend">
-        <li><i class="sw"></i>Focus leg</li>
-        <li><i class="sw dash"></i>Other leg (shifted 50%)</li>
+        <li><i class="sw"></i>Blue leg</li>
+        <li><i class="sw dash"></i>Grey leg (shifted 50%)</li>
         <li><i class="sw dark"></i>SL-RDL angle now</li>
+        <li><i class="sw ring"></i>Leg the RDL follows</li>
       </ul>
     </div>
-    <div id="chartWrap"><svg id="chart" role="img" aria-label="Chart of hip angle against the gait cycle. The running hip goes from 30 degrees flexion at contact to 10 degrees extension near toe-off and 58 degrees flexion in late swing. The SL-RDL standing leg covers 0 to 80 degrees. Click or drag to set the stride position."></svg></div>
+    <div id="chartWrap"><svg id="chart" role="img" aria-label="Chart of hip angle, measured from the pelvis, against the gait cycle. The running hip goes from 30 degrees flexion at contact to 10 degrees extension near toe-off and 58 degrees flexion in late swing. The SL-RDL standing leg covers 0 to 80 degrees. Click or drag to set the stride position."></svg></div>
   </section>
 
   <section class="now" style="margin-top:16px" aria-labelledby="nowTitle">
@@ -337,8 +365,8 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
         <div class="nowname" id="nowName">Late swing</div>
         <div class="nowrange" id="nowRange">80-100% of the cycle</div>
         <div class="nums">
-          <div><small>Running hip</small><b id="nHip">0</b></div>
-          <div><small>Running knee</small><b id="nKnee">0</b></div>
+          <div><small id="lHip">Running hip</small><b id="nHip">0</b></div>
+          <div><small id="lKnee">Running knee</small><b id="nKnee">0</b></div>
           <div><small>SL-RDL hip</small><b id="nRdl">0</b></div>
         </div>
         <div class="work"><h3>Who's doing the work</h3><p id="nowWork"></p></div>
@@ -362,7 +390,7 @@ legend,.lab{font:500 11px/1 "IBM Plex Mono",monospace;text-transform:uppercase;l
   </section>
 
   <footer class="foot" style="margin-top:20px">
-    <p>Angles are approximate lab means at 3.5 to 4.5 m/s (Fukuchi et al. 2017; Heiderscheit et al. 2011) and depend on the measurement model. The figure is schematic and is not your gait. Pelvis tilt and rotation are ignored.</p>
+    <p>Angles are approximate lab means at 3.5 to 4.5 m/s (Fukuchi et al. 2017; Heiderscheit et al. 2011) and depend on the measurement model. Hip angles are measured from the pelvis, as in the lab data. The drawing tips the pelvis forward 12° so the thighs sit where they do in a real stride, and ignores pelvis rotation. The figure is schematic and is not your gait.</p>
     <p>The hamstring meter is a simplified model: stretch index = 5.0 x hip flexion minus 3.0 x knee flexion, in radians, shown relative only. Muscle roles: Hamner et al. 2010; Hamner and Delp 2013; Chumanov et al. 2011; Dorn et al. 2012.</p>
   </footer>
   </main>
@@ -394,15 +422,21 @@ function ev(c,t){
   var h=t1-t0, s=(t-t0)/h, s2=s*s, s3=s2*s;
   return (2*s3-3*s2+1)*pts[i][1]+(s3-2*s2+s)*h*m[i]+(-2*s3+3*s2)*pts[j2][1]+(s3-s2)*h*m[j2];
 }
+/* hip = flexion relative to the pelvis (lab means, ~3.9 m/s). knee = flexion. ank = dorsiflexion (+) / plantarflexion (-). */
 var HIP=mkCurve([[0,30],[5,29],[15,18],[25,5],[35,-7],[40,-10],[45,-6],[55,14],[65,34],[75,50],[85,58],[92,51]]);
-var KNEE=mkCurve([[0,18],[8,35],[15,44],[25,35],[38,20],[50,70],[60,100],[70,95],[80,60],[88,25],[93,14]]);
-var ANK=mkCurve([[0,2],[15,15],[30,5],[38,-22],[50,-8],[65,2]]);
+var KNEE=mkCurve([[0,19],[7,33],[14,41],[24,35],[38,20],[50,66],[58,92],[66,102],[74,88],[82,56],[88,28],[93,14],[97,12]]);
+var ANK=mkCurve([[0,12],[6,18],[14,24],[22,19],[30,5],[37,-14],[41,-24],[47,-20],[56,-8],[66,0],[80,2],[90,2],[96,6]]);
 function kin(p){return {hip:ev(HIP,p),knee:ev(KNEE,p),ank:ev(ANK,p)};}
+var HIPMAX=0;(function(){for(var i=0;i<=1000;i++){HIPMAX=Math.max(HIPMAX,ev(HIP,i/10));}})();
+var STANCE_END=38, GREY_ON=50, GREY_OFF=88;
+var HOLD=clamp(ev(HIP,STANCE_END),0,85);
 
-/* ---------- geometry ---------- */
-var G=360, GF=G-2.5, L1=75, L2=75, FOOT=20, HEEL=6, FT=4, TRUNK=85, BUMP=4.5;
+/* ---------- geometry (T = thigh length = 75) ---------- */
+var PT=12;  /* pelvic anterior tilt, degrees. Thigh angle from vertical = hip flexion - PT. */
+var G=360, GF=G-2.5, L1=75, L2=75, FOOT=26, HEEL=11, FT=4;
+var TRUNK=94, NECK=12, HEADR=9, UA=52.5, FA=49, LEAN=6, BUMP=4;
 function legPose(hx,hy,hip,knee,ank){
-  var th=rad(hip), sh=rad(hip-knee);
+  var th=rad(hip-PT), sh=th-rad(knee);
   var kx=hx+L1*sin(th), ky=hy+L1*cos(th);
   var ax=kx+L2*sin(sh), ay=ky+L2*cos(sh);
   var sx=ax+FT*sin(sh), sy=ay+FT*cos(sh);
@@ -414,9 +448,9 @@ function legPose(hx,hy,hip,knee,ank){
 function lowAt(ph){var k=kin(ph);return legPose(0,0,k.hip,k.knee,k.ank).low;}
 function pelvisY(p){
   var y,s,y0,y1;
-  if(p<38){y=GF-lowAt(p);}
-  else if(p<50){s=(p-38)/12;y0=GF-lowAt(38);y1=GF-lowAt(0);y=y0+(y1-y0)*s-BUMP*4*s*(1-s);}
-  else if(p<88){y=GF-lowAt(p-50);}
+  if(p<STANCE_END){y=GF-lowAt(p);}
+  else if(p<GREY_ON){s=(p-38)/12;y0=GF-lowAt(38);y1=GF-lowAt(0);y=y0+(y1-y0)*s-BUMP*4*s*(1-s);}
+  else if(p<GREY_OFF){y=GF-lowAt(p-50);}
   else{s=(p-88)/12;y0=GF-lowAt(38);y1=GF-lowAt(0);y=y0+(y1-y0)*s-BUMP*4*s*(1-s);}
   var m=Math.max(lowAt(p),lowAt(p+50));
   return Math.min(y,GF-m);
@@ -433,6 +467,7 @@ function el(tag,attrs,parent){
 function f1(v){return v.toFixed(1);}
 function poly(e,pts){e.setAttribute('points',pts.map(function(p){return f1(p[0])+','+f1(p[1]);}).join(' '));}
 function line(e,a,b){e.setAttribute('x1',f1(a[0]));e.setAttribute('y1',f1(a[1]));e.setAttribute('x2',f1(b[0]));e.setAttribute('y2',f1(b[1]));}
+function at(e,x,y){e.setAttribute('x',f1(x));e.setAttribute('y',f1(y));}
 function wedge(path,cx,cy,r,a0,a1){
   if(Math.abs(a1-a0)<0.4){path.setAttribute('d','M0 0');return;}
   var P=function(a){return [cx+r*sin(rad(a)),cy+r*cos(rad(a))];};
@@ -462,6 +497,28 @@ function fmtHip(v){
   if(r<0){return {n:-r,w:'extension',ext:true};}
   return {n:r,w:'flexion',ext:false};
 }
+function mkText(parent,cls,anchor,fill){
+  var a=el('text',{'class':cls+' halo',x:0,y:0},parent), b=el('text',{'class':cls,x:0,y:0},parent);
+  if(anchor){a.setAttribute('text-anchor',anchor);b.setAttribute('text-anchor',anchor);}
+  a.setAttribute('fill',fill);b.setAttribute('fill',fill);
+  return {a:a,b:b,set:function(t,x,y){a.textContent=b.textContent=t;at(a,x,y);at(b,x,y);}};
+}
+
+/* ---------- state + who is the RDL following? ---------- */
+var st={phase:90,playing:false,slow:true,follow:true,mode:'blue',free:60};
+/* r.leg: leg the RDL copies ('blue' | 'grey' | null). r.subj: leg the page talks about. */
+function follow(p){
+  var k=kin(p), ko=kin(p+50);
+  var r={mode:st.mode,k:k,ko:ko,leg:null,subj:'blue',h:0,flight:false,stance:p<STANCE_END};
+  if(st.mode==='free'){r.h=st.free;}
+  else if(st.mode==='blue'){r.leg='blue';r.h=clamp(k.hip,0,85);}
+  else if(p<STANCE_END){r.leg='blue';r.h=clamp(k.hip,0,85);r.stance=true;}
+  else if(p>=GREY_ON&&p<GREY_OFF){r.leg='grey';r.subj='grey';r.h=clamp(ko.hip,0,85);r.stance=true;}
+  else{r.flight=true;r.h=HOLD;r.stance=false;}
+  r.sk=r.subj==='grey'?ko:k;
+  r.sph=r.subj==='grey'?(p+50)%100:p;
+  return r;
+}
 
 /* ---------- build figures ---------- */
 var R={}, D={};
@@ -472,63 +529,92 @@ function buildRun(){
   el('path',{d:d,'class':'belt',fill:'none'},R.belt);
   el('line',{x1:0,y1:G,x2:400,y2:G,'class':'ground',fill:'none'},s);
   R.armFar=el('polyline',{'class':'seg arm-f',fill:'none'},s);
+  R.handFar=el('circle',{'class':'hand-f',r:3.4,cx:0,cy:0},s);
+  R.glowFar=el('polyline',{'class':'seg glow',fill:'none',visibility:'hidden'},s);
   R.legFar=el('polyline',{'class':'seg leg-o',fill:'none'},s);
   R.footFar=el('polyline',{'class':'seg foot-o',fill:'none'},s);
   R.trunk=el('line',{'class':'seg trunk',fill:'none'},s);
-  R.head=el('circle',{'class':'head',r:12,cx:0,cy:0},s);
+  R.neck=el('line',{'class':'seg neck',fill:'none'},s);
+  R.head=el('circle',{'class':'head',r:HEADR,cx:0,cy:0},s);
   R.wedge=el('path',{'class':'wedge',d:'M0 0'},s);
   R.ref=el('line',{'class':'ref',fill:'none'},s);
+  R.glowNear=el('polyline',{'class':'seg glow',fill:'none',visibility:'hidden'},s);
   R.legNear=el('polyline',{'class':'seg leg-f',fill:'none'},s);
   R.footNear=el('polyline',{'class':'seg foot-f',fill:'none'},s);
   R.ham=el('path',{'class':'ham',fill:'none',d:'M0 0'},s);
   R.hamA=el('circle',{'class':'hamdot',r:2.6,cx:0,cy:0},s);
   R.hamB=el('circle',{'class':'hamdot',r:2.6,cx:0,cy:0},s);
+  R.armNearHalo=el('polyline',{'class':'seg arm-halo',fill:'none'},s);
   R.armNear=el('polyline',{'class':'seg arm-n',fill:'none'},s);
+  R.handNear=el('circle',{'class':'hand-n',r:4,cx:0,cy:0},s);
   R.hipDot=el('circle',{'class':'joint',r:5,cx:0,cy:0},s);
-  R.label=el('text',{'class':'svgtxt halo',x:0,y:0,fill:'currentColor'},s);
-  R.label.setAttribute('fill','var(--fg)');
-  R.label2=el('text',{'class':'svgtxt',x:0,y:0},s);
-  R.label2.setAttribute('fill','var(--fg)');
+  R.label=mkText(s,'svgtxt','start','var(--fg)');
+  R.refLab=mkText(s,'svgtxt small','end','var(--fg-soft)');
+  R.tag=mkText(s,'svgtxt small tag','start','var(--fg)');
+  R.tagSw=el('rect',{x:12,y:44,width:9,height:9,rx:1,fill:'var(--accent)'},s);
 }
-function armPts(S,A){
-  var a=rad(A), f=rad(A+95);
-  var e=[S[0]+38*sin(a),S[1]+38*cos(a)];
-  var w=[e[0]+36*sin(f),e[1]+36*cos(f)];
+/* Arm swing: sinusoid in antiphase with the same-side leg. Furthest back when that leg is furthest forward (~85%),
+   furthest forward when it is furthest back (~35%). sh = shoulder angle from vertical (+ forward), -35 to +30 degrees.
+   Elbow flexion 80 (arm back) to 86 (arm forward). Hand runs from hip-pocket height behind to lower-chest height in front. */
+function armPts(S,ph){
+  var sh=-2.5-32.5*cos(2*Math.PI*(ph-85)/100);
+  var f=(sh+35)/65;
+  var a=rad(sh), b=rad(sh+80+6*f);
+  var e=[S[0]+UA*sin(a),S[1]+UA*cos(a)];
+  var w=[e[0]+FA*sin(b),e[1]+FA*cos(b)];
   return [S,e,w];
 }
-function drawRun(p,k,ko){
-  var hx=190, hy=pelvisY(p), hip=[hx,hy];
+var TAGS={blue:'RDL follows: blue leg',ground:'RDL follows: blue leg (on the ground)',grey:'RDL follows: grey leg (on the ground)',none:'RDL follows: nothing (both feet in the air)',free:'RDL: free depth, not following'};
+function drawRun(p,r){
+  var k=r.k, ko=r.ko, hx=190, hy=pelvisY(p), hip=[hx,hy];
   var L=legPose(hx,hy,k.hip,k.knee,k.ank), Lo=legPose(hx,hy,ko.hip,ko.knee,ko.ank);
   poly(R.legNear,[hip,L.k,L.a,L.s]); poly(R.footNear,[L.heel,L.toe]);
   poly(R.legFar,[hip,Lo.k,Lo.a,Lo.s]); poly(R.footFar,[Lo.heel,Lo.toe]);
-  var lean=rad(6), u=[sin(lean),-cos(lean)], fw=[cos(lean),sin(lean)];
+  var gl=function(e,Lx,on){
+    if(!on){e.setAttribute('visibility','hidden');return;}
+    e.removeAttribute('visibility');poly(e,[hip,Lx.k,Lx.a,Lx.heel,Lx.toe]);
+  };
+  gl(R.glowNear,L,r.leg==='blue');gl(R.glowFar,Lo,r.leg==='grey');
+  var lean=rad(LEAN), u=[sin(lean),-cos(lean)];
+  var pu=[sin(rad(PT)),-cos(rad(PT))], pf=[cos(rad(PT)),sin(rad(PT))]; /* pelvis up / forward (tipped forward by PT) */
   var S=[hx+TRUNK*u[0],hy+TRUNK*u[1]];
   line(R.trunk,hip,S);
-  var hd=[hx+(TRUNK+19)*u[0],hy+(TRUNK+19)*u[1]];
-  R.head.setAttribute('cx',f1(hd[0]));R.head.setAttribute('cy',f1(hd[1]));
-  poly(R.armNear,armPts(S,-0.8*(k.hip-24)));
-  poly(R.armFar,armPts(S,-0.8*(ko.hip-24)));
-  /* hamstring */
-  var isch=[hx-8*u[0]-6*fw[0],hy-8*u[1]-6*fw[1]];
-  var ds=[sin(L.sh),cos(L.sh)], back=[-cos(L.sh),sin(L.sh)];
-  var ins=[L.k[0]+0.12*L2*ds[0]+4*back[0],L.k[1]+0.12*L2*ds[1]+4*back[1]];
-  var idx=stretchIdx(k.hip,k.knee);
+  var nk=[S[0]+NECK*u[0],S[1]+NECK*u[1]];
+  line(R.neck,S,nk);
+  R.head.setAttribute('cx',f1(nk[0]+HEADR*u[0]));R.head.setAttribute('cy',f1(nk[1]+HEADR*u[1]));
+  var an=armPts(S,p), af=armPts(S,p+50);
+  poly(R.armNear,an);poly(R.armNearHalo,an);poly(R.armFar,af);
+  R.handNear.setAttribute('cx',f1(an[2][0]));R.handNear.setAttribute('cy',f1(an[2][1]));
+  R.handFar.setAttribute('cx',f1(af[2][0]));R.handFar.setAttribute('cy',f1(af[2][1]));
+  /* the leg whose angle is drawn and numbered: the followed leg, else the blue leg */
+  var Ls=r.subj==='grey'?Lo:L, ks=r.sk;
+  /* hamstring: ischium on the tipped pelvis to just below the knee */
+  var isch=[hx-8*pu[0]-6*pf[0],hy-8*pu[1]-6*pf[1]];
+  var ds=[sin(Ls.sh),cos(Ls.sh)], back=[-cos(Ls.sh),sin(Ls.sh)];
+  var ins=[Ls.k[0]+0.12*L2*ds[0]+4*back[0],Ls.k[1]+0.12*L2*ds[1]+4*back[1]];
+  var idx=stretchIdx(ks.hip,ks.knee);
   var col=setMeter('mRun',idx);
-  hamPath(R.ham,isch,ins,L.th,col);
+  hamPath(R.ham,isch,ins,Ls.th,col);
   R.hamA.setAttribute('cx',f1(isch[0]));R.hamA.setAttribute('cy',f1(isch[1]));
   R.hamB.setAttribute('cx',f1(ins[0]));R.hamB.setAttribute('cy',f1(ins[1]));
-  /* angle */
-  wedge(R.wedge,hx,hy,36,0,k.hip);
-  R.wedge.setAttribute('class','wedge'+(k.hip<0?' ext':''));
-  line(R.ref,hip,[hx,hy+48]);
+  /* hip angle: measured from the pelvis axis (vertical tipped back by PT), not from vertical */
+  wedge(R.wedge,hx,hy,36,-PT,ks.hip-PT);
+  R.wedge.setAttribute('class','wedge'+(ks.hip<0?' ext':'')+(r.subj==='grey'?' grey':''));
+  var rd=[hx+50*sin(rad(-PT)),hy+50*cos(rad(-PT))];
+  line(R.ref,hip,rd);
+  R.refLab.set('pelvis axis',rd[0]-5,rd[1]+9);
   R.hipDot.setAttribute('cx',hx);R.hipDot.setAttribute('cy',f1(hy));
-  var fh=fmtHip(k.hip);
-  R.label.textContent=fh.n+'° '+fh.w;
-  R.label.setAttribute('x',hx+46);R.label.setAttribute('y',f1(hy-6));
-  R.label2.textContent=R.label.textContent;
-  R.label2.setAttribute('x',hx+46);R.label2.setAttribute('y',f1(hy-6));
+  var fh=fmtHip(ks.hip);
+  R.label.set(fh.n+'° '+fh.w,hx+46,hy-6);
+  /* which leg does the RDL follow? */
+  var key=r.mode==='free'?'free':(r.leg===null?'none':(r.mode==='ground'?(r.leg==='grey'?'grey':'ground'):'blue'));
+  R.tag.set(TAGS[key],26,52);
+  R.tagSw.setAttribute('visibility',key==='free'||key==='none'?'hidden':'visible');
+  R.tagSw.setAttribute('fill',r.leg==='grey'?'var(--slate)':'var(--accent)');
   R.belt.setAttribute('transform','translate('+(-((p/100)*266%38)).toFixed(2)+' 0)');
   $('runNum').textContent=fh.n;$('runWord').textContent=fh.w;
+  $('runLeg').textContent=r.subj==='grey'?'grey leg':'blue leg';
+  $('runLeg').style.color=r.subj==='grey'?'var(--slate)':'var(--accent)';
   $('runBig').classList.toggle('ext',fh.ext);
 }
 
@@ -541,7 +627,8 @@ function buildRdl(){
   D.legRear=el('polyline',{'class':'seg leg-o',fill:'none'},s);
   D.footRear=el('polyline',{'class':'seg foot-o',fill:'none'},s);
   D.trunk=el('line',{'class':'seg trunk',fill:'none'},s);
-  D.head=el('circle',{'class':'head',r:12,cx:0,cy:0},s);
+  D.neck=el('line',{'class':'seg neck',fill:'none'},s);
+  D.head=el('circle',{'class':'head',r:HEADR,cx:0,cy:0},s);
   D.legStand=el('polyline',{'class':'seg leg-f',fill:'none'},s);
   D.footStand=el('polyline',{'class':'seg foot-f',fill:'none'},s);
   D.ham=el('path',{'class':'ham',fill:'none',d:'M0 0'},s);
@@ -577,13 +664,14 @@ function drawRdl(h){
   var t=rad(tau), u=[sin(t),-cos(t)], fw=[cos(t),sin(t)], r=[-u[0],-u[1]];
   var S=[hx+TRUNK*u[0],hy+TRUNK*u[1]];
   line(D.trunk,hip,S);
-  var hd=[hx+(TRUNK+19)*u[0],hy+(TRUNK+19)*u[1]];
-  D.head.setAttribute('cx',f1(hd[0]));D.head.setAttribute('cy',f1(hd[1]));
+  var nk=[S[0]+NECK*u[0],S[1]+NECK*u[1]];
+  line(D.neck,S,nk);
+  D.head.setAttribute('cx',f1(nk[0]+HEADR*u[0]));D.head.setAttribute('cy',f1(nk[1]+HEADR*u[1]));
   var rk=[hx+L1*r[0],hy+L1*r[1]], ra=[hx+(L1+L2)*r[0],hy+(L1+L2)*r[1]];
   poly(D.legRear,[hip,rk,ra]);
-  poly(D.footRear,[[ra[0]-5*fw[0],ra[1]-5*fw[1]],[ra[0]+18*fw[0],ra[1]+18*fw[1]]]);
+  poly(D.footRear,[[ra[0]-HEEL*fw[0],ra[1]-HEEL*fw[1]],[ra[0]+FOOT*fw[0],ra[1]+FOOT*fw[1]]]);
   /* arm + dumbbell hanging vertically */
-  var hand=[S[0],S[1]+64];
+  var hand=[S[0],S[1]+UA+FA];
   line(D.arm,S,hand);
   D.hand.setAttribute('cx',f1(hand[0]));D.hand.setAttribute('cy',f1(hand[1]));
   line(D.bar,[hand[0]-11,hand[1]+1],[hand[0]+11,hand[1]+1]);
@@ -613,6 +701,11 @@ function drawRdl(h){
 
 /* ---------- chart ---------- */
 var CH={};
+function curvePath(xs,ys,fn,a,b){
+  var d='',n=Math.max(2,Math.round((b-a)*2)),i,p;
+  for(i=0;i<=n;i++){p=a+(b-a)*i/n;d+=(i?'L':'M')+f1(xs(p))+' '+f1(ys(fn(p)))+' ';}
+  return d;
+}
 function buildChart(){
   var wrap=$('chartWrap'), svg=$('chart');
   var W=Math.max(300,Math.round(wrap.clientWidth||800));
@@ -620,11 +713,12 @@ function buildChart(){
   var H=narrow?300:340, m={l:narrow?44:52,r:narrow?10:16,t:10,b:42};
   var pw=W-m.l-m.r, ph=H-m.t-m.b, YMIN=-15, YMAX=90;
   var xs=function(p){return m.l+p/100*pw;}, ys=function(a){return m.t+(YMAX-a)/(YMAX-YMIN)*ph;};
-  CH={W:W,H:H,m:m,pw:pw,xs:xs,ys:ys};
+  CH={W:W,H:H,m:m,pw:pw,xs:xs,ys:ys,pieces:[]};
   while(svg.firstChild){svg.removeChild(svg.firstChild);}
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
   /* regions */
   el('rect',{x:xs(0),y:m.t,width:xs(38)-xs(0),height:ph,'class':'cbandfill',fill:'var(--stance)'},svg);
+  CH.greyBand=el('rect',{x:xs(50),y:m.t,width:xs(88)-xs(50),height:ph,'class':'cbandfill',fill:'var(--slate)','fill-opacity':0.13,visibility:'hidden'},svg);
   el('rect',{x:xs(0),y:ys(80),width:pw,height:ys(0)-ys(80),'class':'cbandfill',fill:'var(--band)'},svg);
   el('rect',{x:xs(0),y:ys(35),width:pw,height:ys(25)-ys(35),'class':'cbandfill',fill:'var(--band2)'},svg);
   /* grid + ticks */
@@ -645,18 +739,17 @@ function buildChart(){
   el('line',{x1:xs(38),x2:xs(38),y1:m.t,y2:ys(YMIN),'class':'cgrid',fill:'none',style:'stroke:var(--fg-soft);stroke-dasharray:2 3'},svg);
   /* axis titles */
   t=el('text',{x:xs(50),y:H-6,'text-anchor':'middle','class':'clab'},svg);t.setAttribute('fill','var(--fg-soft)');
-  t.textContent='Gait cycle (% from focus foot contact)';
+  t.textContent='Gait cycle (% from blue-leg foot contact)';
   t=el('text',{x:0,y:0,'text-anchor':'middle','class':'clab',transform:'translate(11 '+(m.t+ph/2)+') rotate(-90)'},svg);t.setAttribute('fill','var(--fg-soft)');
   t.textContent='Flexion (+) / Extension (−)';
-  /* curves */
-  var d1='',d2='';
-  for(i=0;i<=200;i++){
-    var p=i/2;
-    d1+=(i?'L':'M')+f1(xs(p))+' '+f1(ys(ev(HIP,p)))+' ';
-    d2+=(i?'L':'M')+f1(xs(p))+' '+f1(ys(ev(HIP,p+50)))+' ';
-  }
-  el('path',{d:d2,'class':'cother',fill:'none'},svg);
-  el('path',{d:d1,'class':'cfocus',fill:'none'},svg);
+  /* curves, split into stance and swing pieces so "Leg on the ground" mode can fade the swing parts */
+  var fb=function(p){return ev(HIP,p);}, fg=function(p){return ev(HIP,p+50);};
+  var addPiece=function(cls,fn,a,b,stance){
+    var e=el('path',{d:curvePath(xs,ys,fn,a,b),'class':cls,fill:'none'},svg);
+    CH.pieces.push({e:e,stance:stance});
+  };
+  addPiece('cother',fg,0,50,false);addPiece('cother',fg,50,88,true);addPiece('cother',fg,88,100,false);
+  addPiece('cfocus',fb,0,38,true);addPiece('cfocus',fb,38,100,false);
   /* labels */
   var lab=function(txt,x,y,anchor,cls){
     var e=el('text',{x:x,y:y,'text-anchor':anchor,'class':'clab '+(cls||'')},svg);
@@ -668,18 +761,24 @@ function buildChart(){
     svg.insertBefore(h,e);
     return e;
   };
-  lab('Foot on ground',(xs(0)+xs(38))/2,ys(86)+3,'middle','strong').setAttribute('fill','var(--fg)');
-  lab('Swing',(xs(38)+xs(100))/2,ys(86)+3,'middle','strong').setAttribute('fill','var(--fg)');
+  lab(narrow?'Blue on ground':'Blue foot on ground',(xs(0)+xs(38))/2,ys(86)+3,'middle','strong').setAttribute('fill','var(--fg)');
+  lab(narrow?'Blue swing':'Blue leg swinging',(xs(38)+xs(100))/2,ys(86)+3,'middle','strong').setAttribute('fill','var(--fg)');
+  CH.greyLab=lab(narrow?'Grey on ground':'Grey foot on ground',(xs(50)+xs(88))/2,ys(86)+17,'middle','strong');
+  CH.greyLab.setAttribute('fill','var(--fg-soft)');CH.greyLab.setAttribute('visibility','hidden');
+  CH.greyLab.previousSibling.setAttribute('visibility','hidden');
   lab('SL-RDL standing-leg range',xs(0)+6,ys(80)+14,'start','acc').setAttribute('fill','var(--accent)');
   lab(narrow?'landing ≈ RDL top third':'landing ≈ top third of the RDL',xs(12),ys(30)+3.5,'start','acc').setAttribute('fill','var(--accent)');
   lab('SL-RDL rear leg (~0°)',xs(0)+6,ys(0)+14,'start','');
   /* dynamic group */
+  CH.mdots=[];
+  for(i=0;i<6;i++){CH.mdots.push(el('circle',{r:5.5,cx:0,cy:0,fill:'none',stroke:'var(--fg)','stroke-width':1.6,visibility:'hidden'},svg));}
   CH.rdlLine=el('line',{x1:xs(0),x2:xs(100),y1:0,y2:0,'class':'crdl',fill:'none'},svg);
   CH.rdlHalo=el('text',{x:xs(100)-4,y:0,'text-anchor':'end','class':'clab strong halo'},svg);
   CH.rdlHalo.setAttribute('fill','var(--fg)');CH.rdlHalo.setAttribute('style','stroke:var(--panel);stroke-width:3px;paint-order:stroke');
   CH.rdlTxt=el('text',{x:xs(100)-4,y:0,'text-anchor':'end','class':'clab strong'},svg);
   CH.rdlTxt.setAttribute('fill','var(--fg)');
   CH.cursor=el('line',{x1:0,x2:0,y1:m.t,y2:ys(YMIN),'class':'ccursor',fill:'none'},svg);
+  CH.ring=el('circle',{r:10,cx:0,cy:0,fill:'none',stroke:'var(--follow)','stroke-width':3,visibility:'hidden'},svg);
   CH.dot2=el('circle',{r:4.5,cx:0,cy:0,'class':'cdot2'},svg);
   CH.dot=el('circle',{r:5.5,cx:0,cy:0,'class':'cdot'},svg);
   var ov=el('rect',{x:m.l,y:m.t,width:pw,height:ph,fill:'transparent',style:'cursor:ew-resize'},svg);
@@ -695,19 +794,67 @@ function buildChart(){
   ov.addEventListener('pointercancel',function(){drag=false;});
   drawChartDyn();
 }
-var cur={p:90,hip:0,h:0};
+var cur={p:90,r:null};
 function drawChartDyn(){
-  if(!CH.cursor){return;}
-  var x=CH.xs(cur.p), y=CH.ys(cur.hip);
+  var r=cur.r;
+  if(!CH.cursor||!r){return;}
+  var ground=r.mode==='ground';
+  var x=CH.xs(cur.p), yb=CH.ys(r.k.hip), yg=CH.ys(r.ko.hip);
   CH.cursor.setAttribute('x1',f1(x));CH.cursor.setAttribute('x2',f1(x));
-  CH.dot.setAttribute('cx',f1(x));CH.dot.setAttribute('cy',f1(y));
-  CH.dot2.setAttribute('cx',f1(x));CH.dot2.setAttribute('cy',f1(CH.ys(ev(HIP,cur.p+50))));
-  var yr=CH.ys(cur.h);
+  CH.dot.setAttribute('cx',f1(x));CH.dot.setAttribute('cy',f1(yb));
+  CH.dot2.setAttribute('cx',f1(x));CH.dot2.setAttribute('cy',f1(yg));
+  /* emphasis: in "Leg on the ground" mode only the stance parts of each curve stay strong */
+  CH.pieces.forEach(function(pc){pc.e.style.opacity=(ground&&!pc.stance)?'0.2':'1';});
+  CH.greyBand.setAttribute('visibility',ground?'visible':'hidden');
+  CH.greyLab.setAttribute('visibility',ground?'visible':'hidden');
+  CH.greyLab.previousSibling.setAttribute('visibility',ground?'visible':'hidden');
+  /* marker for the followed leg */
+  var fy=r.leg==='grey'?yg:yb;
+  if(r.leg){CH.ring.setAttribute('cx',f1(x));CH.ring.setAttribute('cy',f1(fy));CH.ring.setAttribute('visibility','visible');}
+  else{CH.ring.setAttribute('visibility','hidden');}
+  CH.dot.style.opacity=(ground&&r.leg!=='blue')?'0.35':'1';
+  CH.dot2.style.opacity=(ground&&r.leg!=='grey')?'0.35':'1';
+  /* Free mode: mark where the blue leg has the same hip angle as the RDL */
+  var rs=r.mode==='free'?roots(r.h):[];
+  CH.mdots.forEach(function(d,i){
+    if(i<rs.length){d.setAttribute('cx',f1(CH.xs(rs[i].p)));d.setAttribute('cy',f1(CH.ys(r.h)));d.setAttribute('visibility','visible');}
+    else{d.setAttribute('visibility','hidden');}
+  });
+  var yr=CH.ys(r.h);
   CH.rdlLine.setAttribute('y1',f1(yr));CH.rdlLine.setAttribute('y2',f1(yr));
+  CH.rdlLine.style.opacity=r.flight?'0.55':'1';
   var ty=yr-5; if(ty<CH.m.t+10){ty=yr+13;}
-  var txt='SL-RDL now '+Math.round(cur.h)+'°';
+  var txt=(r.flight?'SL-RDL holds ':'SL-RDL now ')+Math.round(r.h)+'°';
   CH.rdlTxt.textContent=CH.rdlHalo.textContent=txt;
   CH.rdlTxt.setAttribute('y',f1(ty));CH.rdlHalo.setAttribute('y',f1(ty));
+}
+
+/* ---------- Free mode: where in the stride does the blue leg have this hip angle? ---------- */
+function roots(h){
+  var out=[], prev=ev(HIP,0)-h, pp=0, i, g, p, q;
+  for(i=1;i<=1000;i++){
+    p=i/10; g=ev(HIP,p)-h;
+    if((prev<0&&g>=0)||(prev>0&&g<=0)){q=pp+(p-pp)*(prev/(prev-g));out.push({p:q%100,rising:g>prev});}
+    prev=g;pp=p;
+  }
+  return out;
+}
+function pctTxt(p){var r=Math.round(p);return '('+(r===0?'':'≈')+r+'%)';}
+function freeMatch(h){
+  if(h>HIPMAX+0.5){return ['no','Deeper than anything in running at this pace (peak ≈ '+Math.round(HIPMAX)+'°).'];}
+  var rs=roots(h), a=[], b=[];
+  rs.forEach(function(o){
+    if(o.p<STANCE_END){a.push((o.p<8?'landing':(o.p<30?'midstance':'push-off'))+' '+pctTxt(o.p));}
+    else{b.push(o);}
+  });
+  /* two swing matches almost on top of each other = the peak of late swing */
+  if(b.length===2&&Math.abs(b[1].p-b[0].p)<4){b=[{peak:true,p:(b[0].p+b[1].p)/2}];}
+  b=b.map(function(o){
+    var nm=o.peak?'peak late swing':(ev(KNEE,o.p)>45?(o.p<55?'early swing, knee bent':'mid swing, knee bent'):'late swing');
+    return nm+' '+pctTxt(o.p);
+  });
+  if(!a.length&&!b.length){return ['no','At '+Math.round(h)+'°: only at the very top of late swing (≈85%).'];}
+  return ['no','At '+Math.round(h)+'°: stance: '+(a.length?a.join(' and '):'none')+'. Swing: '+(b.length?b.join(' and '):'none')+'.'];
 }
 
 /* ---------- phases / copy ---------- */
@@ -742,8 +889,20 @@ var VL={match:'Match',partial:'Partial',no:'No'};
 var CHIPS=[['Touchdown',0],['Midstance',18],['Toe-off',38],['Peak swing',85],['Late swing',93]];
 function segIndex(p){for(var i=0;i<SEGS.length;i++){if(p>=SEGS[i].a&&p<SEGS[i].b){return i;}}return SEGS.length-1;}
 
-/* ---------- state ---------- */
-var st={phase:90,playing:false,slow:true,follow:true,free:60};
+/* "Matches your ..." line for the RDL panel. Returns [tone, text]. */
+function matchLine(r){
+  if(r.mode==='free'){return freeMatch(r.h);}
+  if(r.flight){return ['no','Holding the last angle. No leg is on the ground right now.'];}
+  var hip=r.sk.hip, knee=r.sk.knee;
+  if(hip<0){return ['no','No match. Your leg is behind you past straight; the RDL stops at 0°.'];}
+  if(r.stance){
+    return hip>=20?['ok','Matches your landing leg (foot on the ground).']:['ok','Matches your stance leg as it straightens under you.'];
+  }
+  if(knee>45){return ['mid','Same hip angle, wrong shape: your knee is deeply bent mid-swing, so the hamstring is slack.'];}
+  return ['mid','Matches your swinging leg just before it lands (foot in the air). Same hamstring length, different job.'];
+}
+
+/* ---------- render ---------- */
 var raf=0,last=0;
 var reduce=false;
 try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(_){}
@@ -752,30 +911,43 @@ function setVerdict(key,v){
   var b=$('vb'+key);b.className='vb '+v[0];b.textContent=VL[v[0]];
   $('vt'+key).textContent=v[1];
 }
-var lastSeg=-1;
+var lastKey='';
 function render(){
-  var p=st.phase, k=kin(p), ko=kin(p+50);
-  var h=st.follow?clamp(k.hip,0,85):st.free;
-  drawRun(p,k,ko);
+  var p=st.phase, r=follow(p), h=r.h;
+  drawRun(p,r);
   drawRdl(h);
-  $('badge').hidden=!(st.follow&&k.hip<0);
-  cur.p=p;cur.hip=k.hip;cur.h=h;
+  /* badge: extension warning, or "both feet in the air" */
+  var bd=$('badge');
+  if(r.mode==='ground'&&r.flight){
+    bd.hidden=false;bd.querySelector('i').textContent='i';
+    $('badgeTxt').textContent='Both feet in the air. Nothing on the ground to compare.';
+  }else if(r.leg&&r.sk.hip<0){
+    bd.hidden=false;bd.querySelector('i').textContent='!';
+    $('badgeTxt').textContent="The SL-RDL standing leg can't go past straight. Toe-off extension (~10°) isn't trained here.";
+  }else{bd.hidden=true;}
+  var ml=matchLine(r);
+  $('matchTxt').textContent=ml[1];
+  $('matchBox').className='slot match '+ml[0];
+  cur.p=p;cur.r=r;
   drawChartDyn();
   $('phase').value=p;
   $('phaseOut').textContent=Math.round(p)+'%';
-  var si=segIndex(p), S=SEGS[si];
-  if(si!==lastSeg){
-    lastSeg=si;
+  var si=segIndex(r.sph), S=SEGS[si];
+  var key=si+'|'+r.subj+'|'+(r.mode==='ground'&&r.flight);
+  if(key!==lastKey){
+    lastKey=key;
     $('nowName').textContent=S.name;
-    $('nowRange').textContent=S.a+' to '+Math.min(100,Math.round(S.b))+'% of the cycle';
+    $('nowRange').textContent=S.a+' to '+Math.min(100,Math.round(S.b))+'% of the cycle'+(r.subj==='grey'?' (grey leg, stride position + 50%)':'')+(r.mode==='ground'&&r.flight?'. Both feet in the air.':'');
     $('nowWork').textContent=S.work;
     setVerdict('Shape',S.shape);setVerdict('Job',S.job);setVerdict('Time',S.time);
     var bs=$('segbar').children;
     for(var i=0;i<bs.length;i++){if(i===si){bs[i].setAttribute('aria-current','true');}else{bs[i].removeAttribute('aria-current');}}
+    $('lHip').textContent=r.subj==='grey'?'Grey-leg hip':'Running hip';
+    $('lKnee').textContent=r.subj==='grey'?'Grey-leg knee':'Running knee';
   }
-  var fh=fmtHip(k.hip);
+  var fh=fmtHip(r.sk.hip);
   $('nHip').innerHTML=fh.n+'°<i>'+fh.w+'</i>';
-  $('nKnee').innerHTML=Math.round(k.knee)+'°<i>flexion</i>';
+  $('nKnee').innerHTML=Math.round(r.sk.knee)+'°<i>flexion</i>';
   $('nRdl').innerHTML=Math.round(h)+'°<i>flexion</i>';
   var cs=$('chips').children;
   for(var j=0;j<cs.length;j++){cs[j].setAttribute('aria-pressed',Math.abs(p-CHIPS[j][1])<=2?'true':'false');}
@@ -799,6 +971,14 @@ function setPhase(p,fromUser){
   st.phase=clamp(p,0,100);
   render();
 }
+function setMode(m){
+  st.mode=m;st.follow=m!=='free';
+  $('depth').disabled=m!=='free';
+  var inp=$(m==='blue'?'modeBlue':(m==='ground'?'modeGround':'modeFree'));
+  if(inp&&!inp.checked){inp.checked=true;}
+  lastKey='';
+  render();
+}
 
 /* ---------- wiring ---------- */
 buildRun();buildRdl();
@@ -817,7 +997,10 @@ buildRun();buildRdl();
     b.style.flex=(Math.min(100,s.b)-s.a)+' 1 0';
     b.textContent=s.nm;b.title=s.name+' ('+s.a+' to '+Math.min(100,Math.round(s.b))+'%)';
     b.setAttribute('aria-label',s.name+', jump to '+s.a+'%');
-    b.addEventListener('click',function(){setPhase(s.a+(i===0?0:1),true);});
+    b.addEventListener('click',function(){
+      /* in "Leg on the ground" mode late swing is only reachable while both feet are in the air (88-100%) */
+      setPhase((st.mode==='ground'&&i===4)?90:s.a+(i===0?0:1),true);
+    });
     sb.appendChild(b);
   });
 })();
@@ -827,11 +1010,7 @@ document.querySelectorAll('input[name=speed]').forEach(function(r){
   r.addEventListener('change',function(){st.slow=$('speedSlow').checked;});
 });
 document.querySelectorAll('input[name=mode]').forEach(function(r){
-  r.addEventListener('change',function(){
-    st.follow=$('modeFollow').checked;
-    $('depth').disabled=st.follow;
-    render();
-  });
+  r.addEventListener('change',function(){if(r.checked){setMode(r.value);}});
 });
 $('depth').addEventListener('input',function(e){
   st.free=parseFloat(e.target.value);
@@ -846,7 +1025,7 @@ if(window.ResizeObserver){
 }else{window.addEventListener('resize',onResize);}
 buildChart();
 render();
-window.__stride={setPhase:function(p){setPhase(p,true);},state:st,pelvisY:pelvisY,legPose:legPose,kin:kin,lowAt:lowAt,GF:GF,reduce:reduce};
+window.__stride={setPhase:function(p){setPhase(p,true);},setMode:setMode,state:st,pelvisY:pelvisY,legPose:legPose,kin:kin,lowAt:lowAt,GF:GF,PT:PT,follow:follow,matchLine:matchLine,reduce:reduce};
 })();
 </script>
 <script>

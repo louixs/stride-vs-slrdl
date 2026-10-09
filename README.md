@@ -17,4 +17,4 @@ Visit once while online so the service worker can cache everything.
 - **Android Chrome:** menu > Install app.
 
 ## After editing files
-The service worker is cache-first, so changes will not appear until the cache name changes. In `sw.js`, bump `CACHE_VERSION` (e.g. `stride-rdl-v1` to `stride-rdl-v2`) and redeploy. Old caches are deleted on activate; reload twice (or close and reopen the app) to pick up the new version.
+Page loads (navigations) are network-first, so edits to `index.html` show up on the next online visit without any cache bump. Other files (icons, manifest) are cache-first. If you change those, or add files to the precache list, bump `CACHE_VERSION` in `sw.js` (e.g. `stride-rdl-v2` to `stride-rdl-v3`) and redeploy. The new worker takes over immediately (`skipWaiting` and `clients.claim`) and old caches are deleted on activate. Offline, the last page you loaded is served from the cache.
