@@ -1,6 +1,6 @@
 // Bump CACHE_VERSION whenever the file list changes. Page edits reach online users on their next visit anyway
 // (navigations are network-first); the bump just clears stale copies of the other files.
-const CACHE_VERSION = 'stride-rdl-v5';
+const CACHE_VERSION = 'stride-rdl-v8';
 const PRECACHE = ['./', './index.html', './workouts.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
